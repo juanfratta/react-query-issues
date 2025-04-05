@@ -7,6 +7,5 @@ export const getIssue = async (issueNumber: number): Promise<GithubIssue>=> {
     
       const { data } = await guithubApi.get<GithubIssue>(`/issues/${issueNumber}`);
     
-      console.log(data);
       return data;
 };

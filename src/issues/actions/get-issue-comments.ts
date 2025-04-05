@@ -11,6 +11,5 @@ export const getIssueComments = async (
     `/issues/${issueNumber}/comments`
   );
 
-  console.log(data);
   return data;
 };
