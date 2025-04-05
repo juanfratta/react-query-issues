@@ -1,0 +1,17 @@
+1 -  useQuery se usa para recuperar la data.
+ 
+ Ejemplo: 
+ 
+ const issuesQuery = useQuery({
+    queryKey: ["issues"],
+    queryFn: getIssues,
+    staleTime: 1000 * 60
+  });
+
+  ver useIssue para ejemplos de recuperación en paralelo o con dependencia.
+
+2 - useQueryClient se utiliza para recuperar el contexto. 
+Y realizar por ejemplo un prefetch o un setQuery
+
+
+

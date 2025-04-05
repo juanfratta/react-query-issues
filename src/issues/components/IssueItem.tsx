@@ -1,16 +1,16 @@
 import { FiCheckCircle, FiInfo, FiMessageSquare } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { GithubIssue, State } from "../interfaces";
 import { useQueryClient } from "@tanstack/react-query";
-import { getIssue, getIssueComments } from "../actions";
+
+import { /* getIssue, */ getIssueComments } from "../actions";
+import { GithubIssue, State } from "../interfaces";
 
 export const IssueItem = ({ issue }: { issue: GithubIssue }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   // Prefetching the issue and comments when the user hovers over the item
-
-  const preFetch = () => {
+/*   const preFetch = () => {
     console.log("Prefetching issue", issue.number);
     queryClient.prefetchQuery({
       queryKey: ["issues", issue.number],
@@ -23,11 +23,27 @@ export const IssueItem = ({ issue }: { issue: GithubIssue }) => {
       queryFn: () => getIssueComments(issue.number),
       staleTime: 1000 * 60,
     });
-  };
+  }; */
+
+  // Set issue data directly in the cache and prefetch the comments
+
+  const presetData  = ()=>{
+    
+    queryClient.setQueryData(["issues", issue.number], issue,{
+      updatedAt: Date.now() + 1000 * 60, // 1 minute
+    });
+
+    queryClient.prefetchQuery({
+      queryKey: ["issues", issue.number, "comments"],
+      queryFn: () => getIssueComments(issue.number),
+      staleTime: 1000 * 60,
+    });
+  }
 
   return (
     <div
-      onMouseEnter={preFetch}
+      // onMouseEnter={preFetch}
+      onMouseEnter={presetData}
       className="animate-fadeIn flex items-center px-2 py-3 mb-5 border rounded-md bg-slate-900 hover:bg-slate-800"
     >
       {issue.state !== State.Close ? (
